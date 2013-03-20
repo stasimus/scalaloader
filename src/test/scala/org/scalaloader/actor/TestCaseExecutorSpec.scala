@@ -3,7 +3,6 @@ package org.scalaloader.actor
 import org.mockito.Mockito._
 import akka.testkit.TestActorRef
 import org.scalaloader.domain.TestCase
-import org.scalaloader.TestCaseExecutor
 import scala.concurrent.duration._
 import org.mockito.invocation.InvocationOnMock
 
@@ -22,7 +21,7 @@ class TestCaseExecutorSpec extends ActorSpec {
 
       val message = receiveOne(100 milliseconds).asInstanceOf[TestCaseCompleteEvent]
 
-      (message.error) should equal(None)
+      (message.measure.error) should equal(None)
 
       val error = new RuntimeException
       when(testCase.test()).thenThrow(error)
@@ -30,7 +29,7 @@ class TestCaseExecutorSpec extends ActorSpec {
       actorRef ! RunTestCaseEvent(testCase)
 
       val message2 = receiveOne(100 milliseconds).asInstanceOf[TestCaseCompleteEvent]
-      (message2.error) should equal(Some(error))
+      (message2.measure.error) should equal(Some(error))
     }
     "aproximetly mesure execution time" in {
       val testCase = mock(classOf[TestCase])
@@ -42,7 +41,7 @@ class TestCaseExecutorSpec extends ActorSpec {
       actorRef ! RunTestCaseEvent(testCase)
 
       val message = receiveOne(1500 milliseconds).asInstanceOf[TestCaseCompleteEvent]
-      assert(message.end - message.start >= 1200)
+      assert(message.measure.end - message.measure.start >= 1200)
     }
   }
 }

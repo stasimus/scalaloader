@@ -3,8 +3,6 @@ import sbt.Keys._
 
 object ScalaloaderBuild extends Build {
 
-  val continuations = compilerPlugin("org.scala-lang.plugins" % "continuations" % "2.10.0")
-
   lazy val projectResolvers = Seq(
     "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases"
   )
@@ -25,9 +23,7 @@ object ScalaloaderBuild extends Build {
       version := "0.1-SNAPSHOT",
       scalaVersion := "2.10.0",
       resolvers ++= projectResolvers,
-      libraryDependencies ++= projectDependecies,
-      autoCompilerPlugins := true,
-      scalacOptions += "-P:continuations:enable"
+      libraryDependencies ++= projectDependecies
     )
   )
 }

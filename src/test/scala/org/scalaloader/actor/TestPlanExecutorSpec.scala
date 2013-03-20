@@ -20,16 +20,16 @@ class TestPlanExecutorSpec extends ActorSpec {
 
       within(1 second) {
         workerProbe.expectMsgType[RunTestCaseEvent]
-        workerProbe reply (TestCaseCompleteEvent(0, 1000))
+        workerProbe reply (TestCaseCompleteEvent(Measure(0, 1000)))
         resultProbe.expectMsgType[TestCaseResultEvent]
 
         workerProbe.expectMsgType[RunTestCaseEvent]
-        workerProbe reply (TestCaseCompleteEvent(0, 1200))
+        workerProbe reply (TestCaseCompleteEvent(Measure(0, 1200)))
         resultProbe.expectMsgType[TestCaseResultEvent]
         resultProbe.expectMsgType[TestPlanResultEvent]
       }
 
-      testPlan ! TestCaseCompleteEvent(0, 0)
+      testPlan ! TestCaseCompleteEvent(Measure(0, 0))
       workerProbe.expectNoMsg(500 milliseconds)
     }
     "react on timeout" in {
@@ -47,7 +47,7 @@ class TestPlanExecutorSpec extends ActorSpec {
       }
 
       within(1 second) {
-        workerProbe reply (TestCaseCompleteEvent(0, 1200))
+        workerProbe reply (TestCaseCompleteEvent(Measure(0, 1200)))
         resultProbe.expectNoMsg(500 milliseconds)
       }
     }
@@ -66,7 +66,7 @@ class TestPlanExecutorSpec extends ActorSpec {
           checkTheStateData(testPlan.stateData, i)
 
           workerProbe.expectMsgType[RunTestCaseEvent](100 milliseconds)
-          workerProbe reply (TestCaseCompleteEvent(0, 1000))
+          workerProbe reply (TestCaseCompleteEvent(Measure(0, 1000)))
       }
 
       (testPlan.stateName) should equal(Done)
