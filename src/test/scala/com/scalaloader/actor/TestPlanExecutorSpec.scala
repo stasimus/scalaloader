@@ -1,7 +1,7 @@
-package org.scalaloader.actor
+package com.scalaloader.actor
 
 import akka.testkit.{TestFSMRef, TestProbe}
-import org.scalaloader.domain.TestCase
+import com.scalaloader.domain.TestCase
 import org.mockito.Mockito._
 import scala.concurrent.duration._
 

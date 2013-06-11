@@ -1,4 +1,4 @@
-package org.scalaloader.domain
+package com.scalaloader.domain
 
 /**
  * User: stas
@@ -9,5 +9,5 @@ trait TestCase extends Serializable {
 }
 
 case class FunctionTestCase[T](p: T, f: T => Unit) extends TestCase {
-  def test = f apply (p)
+  def test = f apply p
 }

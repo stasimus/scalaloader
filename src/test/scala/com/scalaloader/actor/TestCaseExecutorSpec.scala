@@ -1,8 +1,8 @@
-package org.scalaloader.actor
+package com.scalaloader.actor
 
 import org.mockito.Mockito._
 import akka.testkit.TestActorRef
-import org.scalaloader.domain.TestCase
+import com.scalaloader.domain.TestCase
 import scala.concurrent.duration._
 import org.mockito.invocation.InvocationOnMock
 
@@ -29,7 +29,7 @@ class TestCaseExecutorSpec extends ActorSpec {
       actorRef ! RunTestCaseEvent(testCase)
 
       val message2 = receiveOne(100 milliseconds).asInstanceOf[TestCaseCompleteEvent]
-      (message2.measure.error) should equal(Some(error))
+      (message2.measure.error) should be(Some(error.toString))
     }
     "aproximetly mesure execution time" in {
       val testCase = mock(classOf[TestCase])

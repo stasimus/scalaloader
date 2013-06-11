@@ -1,6 +1,6 @@
-package org.scalaloader.persist
+package com.scalaloader.persist
 
-import org.scalaloader.actor.{Statistics, TestPlanResultEvent, TestCaseResultEvent}
+import com.scalaloader.actor.{StatisticsEvent, TestPlanResultEvent, TestCaseResultEvent}
 
 
 /**
@@ -12,5 +12,7 @@ trait ResultPersistor {
 
   def processTestPlan(result: TestPlanResultEvent)
 
-  def report(stat: Statistics)
+  def report(stat: StatisticsEvent)
+
+  def close()
 }

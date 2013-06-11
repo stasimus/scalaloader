@@ -1,4 +1,4 @@
-package org.scalaloader.actor
+package com.scalaloader.actor
 
 import akka.testkit.{ImplicitSender, TestKit}
 import akka.actor.ActorSystem

@@ -1,4 +1,4 @@
-package org.scalaloader.actor
+package com.scalaloader.actor
 
 import akka.actor.{ActorLogging, Actor}
 import System._
@@ -17,7 +17,7 @@ class TestCaseExecutor extends Actor with ActorLogging {
       }
       catch {
         case error: Throwable =>
-          sender ! TestCaseCompleteEvent(Measure(start, nanoTime, Some(error)))
+          sender ! TestCaseCompleteEvent(Measure(start, nanoTime, Some(error.toString)))
           throw error
       } finally {
         log.debug(s"TestCase ${testCase} executed")

@@ -1,4 +1,4 @@
-package org.scalaloader.actor
+package com.scalaloader.actor
 
 import akka.actor.{FSM, LoggingFSM, Actor, ActorRef}
 import java.util.UUID
@@ -8,19 +8,7 @@ import scala.concurrent.duration._
  * User: stas
  * Date: 3/19/13, 5:32 PM
  */
-sealed trait TestPlanState
 
-case object Free extends TestPlanState
-
-case object Processing extends TestPlanState
-
-case object Done extends TestPlanState
-
-sealed trait StateData
-
-object InitialStateData extends StateData
-
-case class DefinedStateData(name: String, uuid: String, left: Int) extends StateData
 
 case class TestPlanExecutor(resultListener: ActorRef, worker: ActorRef, timeOutSeconds: Int = 60)
   extends Actor with LoggingFSM[TestPlanState, StateData] {
@@ -29,7 +17,7 @@ case class TestPlanExecutor(resultListener: ActorRef, worker: ActorRef, timeOutS
     case Event(RunTestPlanEvent(name, list), _) => {
       log.debug("Starting TestPlan...")
       list foreach (tc => worker ! RunTestCaseEvent(tc))
-      goto(Processing) using (DefinedStateData(name, UUID.randomUUID().toString, list.size))
+      goto(Processing) using DefinedStateData(name, UUID.randomUUID().toString, list.size)
     }
   }
 
