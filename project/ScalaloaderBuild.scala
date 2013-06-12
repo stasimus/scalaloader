@@ -12,6 +12,7 @@ object ScalaloaderBuild extends Build {
   )
 
   lazy val akkaVersion = "2.1.4"
+  val destVersion = "2.10.0"
 
   lazy val projectDependecies = Seq(
     "com.typesafe.akka" %% "akka-actor" % akkaVersion,
@@ -19,7 +20,7 @@ object ScalaloaderBuild extends Build {
     "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
     "org.scalatest" %% "scalatest" % "1.9.1" withSources(),
     "org.mockito" % "mockito-core" % "1.9.5",
-    "org.reactivemongo" %% "reactivemongo" % "0.8" withSources() ,
+    "org.reactivemongo" %% "reactivemongo" % "0.8" withSources(),
     "com.top10" %% "scala-redis-client" % "1.13.0" withSources(),
     "io.spray" %% "spray-json" % "1.2.5",
     "ch.qos.logback" % "logback-classic" % "1.0.7"
@@ -31,8 +32,9 @@ object ScalaloaderBuild extends Build {
     settings = Project.defaultSettings ++ Seq(
       name := "ScalaLoader",
       organization := "com.scalaloader",
+      exportJars := true,
       version := "0.1-SNAPSHOT",
-      scalaVersion := "2.10.0",
+      scalaVersion := destVersion,
       resolvers ++= projectResolvers,
       libraryDependencies ++= projectDependecies
     )
@@ -46,7 +48,7 @@ object ScalaloaderBuild extends Build {
       name := "ScalaLoaderExample",
       organization := "com.scalaloader",
       version := "0.1-SNAPSHOT",
-      scalaVersion := "2.10.0",
+      scalaVersion := destVersion,
       libraryDependencies ++= projectDependecies
     )
   ) dependsOn scalaloader

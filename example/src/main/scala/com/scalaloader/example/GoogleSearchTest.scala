@@ -1,6 +1,7 @@
 package com.scalaloader.example
 
 import com.scalaloader.{ApplicationContext, AbstractTestRunner}
+import scala.util.Random
 
 /**
  * User: stas
@@ -10,7 +11,12 @@ object GoogleSearchTest extends AbstractTestRunner with ApplicationContext {
   measure testPlan "Search on Google" in {
     using(1 to 10) inParallel {
       id =>
-        println(id)
+        val random: Long = Random.nextInt(3000)
+
+      if (random > 2000)
+        throw new RuntimeException()
+      else
+        Thread.sleep(random)
     }
   }
 }

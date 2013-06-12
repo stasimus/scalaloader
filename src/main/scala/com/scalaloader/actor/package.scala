@@ -7,8 +7,6 @@ import akka.actor.ActorRef
  * User: stas
  * Date: 6/11/13, 3:03 PM
  */
-
-
 sealed trait TestPlanEvent
 
 case class RunTestPlanEvent(name: String, list: Seq[TestCase]) extends TestPlanEvent
