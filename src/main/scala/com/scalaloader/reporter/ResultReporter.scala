@@ -1,13 +1,13 @@
-package com.scalaloader.persist
+package com.scalaloader.reporter
 
 import com.scalaloader.actor.{StatisticsEvent, TestPlanResultEvent, TestCaseResultEvent}
 
-
 /**
  * User: stas
- * Date: 3/20/13, 1:41 AM
+ * Date: 12/06/13, 15:12
  */
-trait ResultPersistor {
+//TODO: probably move into actor
+trait ResultReporter {
   def processTestCase(result: TestCaseResultEvent)
 
   def processTestPlan(result: TestPlanResultEvent)

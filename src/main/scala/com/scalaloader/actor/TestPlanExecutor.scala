@@ -1,6 +1,6 @@
 package com.scalaloader.actor
 
-import akka.actor.{FSM, LoggingFSM, Actor, ActorRef}
+import akka.actor._
 import java.util.UUID
 import scala.concurrent.duration._
 
@@ -10,14 +10,14 @@ import scala.concurrent.duration._
  */
 
 
-case class TestPlanExecutor(resultListener: ActorRef, worker: ActorRef, timeOutSeconds: Int = 60)
+class TestPlanExecutor(resultListener: ActorRef, worker: ActorRef, timeOutSeconds: Int = 60)
   extends Actor with LoggingFSM[TestPlanState, StateData] {
 
   when(Free) {
     case Event(RunTestPlanEvent(name, list), _) => {
       log.debug("Starting TestPlan...")
       list foreach (tc => worker ! RunTestCaseEvent(tc))
-      goto(Processing) using DefinedStateData(name, UUID.randomUUID().toString, list.size)
+      goto(Processing) using DefinedStateData(sender, name, UUID.randomUUID().toString, list.size)
     }
   }
 
@@ -39,8 +39,12 @@ case class TestPlanExecutor(resultListener: ActorRef, worker: ActorRef, timeOutS
   }
 
   def moveToDoneState(sd: DefinedStateData, result: String) = {
-    resultListener ! TestPlanResultEvent(sd.name, sd.uuid, System.currentTimeMillis(), result)
-    goto(Done) using (InitialStateData)
+    val event = TestPlanResultEvent(sd.name, sd.uuid, System.currentTimeMillis(), result)
+
+    resultListener ! event
+    sd.sender ! event
+
+    goto(Done) using InitialStateData
   }
 
   when(Done) {
@@ -62,4 +66,8 @@ case class TestPlanExecutor(resultListener: ActorRef, worker: ActorRef, timeOutS
   }
 
   startWith(Free, InitialStateData)
+}
+
+object TestPlanExecutor {
+  def apply(resultListener: ActorRef, worker: ActorRef) = Props(new TestPlanExecutor(resultListener, worker))
 }

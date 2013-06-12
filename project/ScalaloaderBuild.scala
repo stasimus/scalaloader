@@ -11,16 +11,18 @@ object ScalaloaderBuild extends Build {
     "spray" at "http://repo.spray.io/"
   )
 
-  lazy val akkaVersion = "2.1.1"
+  lazy val akkaVersion = "2.1.4"
 
   lazy val projectDependecies = Seq(
     "com.typesafe.akka" %% "akka-actor" % akkaVersion,
     "com.typesafe.akka" %% "akka-testkit" % akkaVersion,
+    "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
     "org.scalatest" %% "scalatest" % "1.9.1" withSources(),
     "org.mockito" % "mockito-core" % "1.9.5",
-    "org.reactivemongo" %% "reactivemongo" % "0.8" withSources(),
+    "org.reactivemongo" %% "reactivemongo" % "0.8" withSources() ,
     "com.top10" %% "scala-redis-client" % "1.13.0" withSources(),
-    "io.spray" %%  "spray-json" % "1.2.5"
+    "io.spray" %% "spray-json" % "1.2.5",
+    "ch.qos.logback" % "logback-classic" % "1.0.7"
   )
 
   lazy val scalaloader = Project(

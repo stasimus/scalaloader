@@ -35,7 +35,7 @@ trait DSL {
       val result = try {block; None} catch {case (e: Throwable) => Some(e) }
       val end = nanoTime()
 
-      testExecutor report(contextName.getOrElse(name), name, start, end, result)
+      worker report(contextName.getOrElse(name), name, start, end, result)
 
       result.foreach(throw _)
     }
@@ -53,8 +53,10 @@ trait DSL {
     def concurrentlyWith(another: ConcurrentTestPlanExecutor): ConcurrentTestPlanExecutor =
       ConcurrentTestPlanExecutor(another.list ::: list)
 
-    def executeSync() { testExecutor.runAndWait(list) }
+    def executeSync() { worker.runAndWait(list) }
   }
+
+  def using[T](gen: Seq[T]) = ExecutorBuilder(contextName.get, gen)
 
   case class ExecutorBuilder[B](name: String, gen: Seq[B]) {
     def inParallel(f: B => Unit) = asParallelBatch(f)(gen.size)
@@ -64,13 +66,11 @@ trait DSL {
     def asSequence(f: B => Unit) = ConcurrentTestPlanExecutor(execute(f, 1))
 
     def execute(f: (B) => Unit, numberOfWorkers: Int) = {
-      List(testExecutor run(numberOfWorkers, name, gen.map(p => FunctionTestCase(p, f))))
+      List(worker run(numberOfWorkers, name, gen.map(p => FunctionTestCase(p, f))))
     }
   }
 
-  def using[T](gen: Seq[T]) = ExecutorBuilder(contextName.get, gen)
-
   def tearDown() {
-    testExecutor.stop()
+    worker.stop()
   }
 }

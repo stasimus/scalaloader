@@ -7,6 +7,7 @@ import java.util.UUID._
 import System._
 import scala.util.Random._
 import org.mockito.Matchers._
+import com.scalaloader.reporter.ResultReporter
 
 /**
  * User: stas
@@ -16,8 +17,9 @@ class ResultsMediatorSpec extends ActorSpec {
   "A ResultsMediatorSpec" should {
     "react on all supported messages via delegating to persistence" in {
       val resultProcessor = mock(classOf[ResultPersistor])
+      val resultReporter = mock(classOf[ResultReporter])
 
-      val actorRef = TestActorRef(new ResultsMediator(resultProcessor))
+      val actorRef = TestActorRef(new ResultsMediator(resultProcessor, resultReporter))
       val uuid = randomUUID().toString
 
       val event1 = TestPlanResultEvent("testing ...", uuid, nanoTime(), "result is ...")

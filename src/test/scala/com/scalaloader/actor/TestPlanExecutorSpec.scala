@@ -71,6 +71,26 @@ class TestPlanExecutorSpec extends ActorSpec {
 
       (testPlan.stateName) should equal(Done)
     }
+    "sends on results done event" in {
+      val (workerProbe, resultProbe) = createTestProbes
+
+      val testPlan = createTestPlanActor(resultProbe, workerProbe)
+
+      testPlan ! RunTestPlanEvent("tp name", createTestCasesList(2))
+
+      within(1 second) {
+        workerProbe.expectMsgType[RunTestCaseEvent]
+        workerProbe reply (TestCaseCompleteEvent(Measure(0, 1000)))
+        resultProbe.expectMsgType[TestCaseResultEvent]
+
+        workerProbe.expectMsgType[RunTestCaseEvent]
+        workerProbe reply (TestCaseCompleteEvent(Measure(0, 1200)))
+        resultProbe.expectMsgType[TestCaseResultEvent]
+        resultProbe.expectMsgType[TestPlanResultEvent]
+      }
+
+      expectMsgType[TestPlanResultEvent]
+    }
   }
 
 
