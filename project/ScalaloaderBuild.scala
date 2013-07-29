@@ -8,13 +8,16 @@ object ScalaloaderBuild extends Build {
     "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases",
     "Typesafe Snapshots" at "http://repo.typesafe.com/typesafe/snapshots",
     "Sonatype OSS Releases" at "http://oss.sonatype.org/content/repositories/releases/",
-    "spray" at "http://repo.spray.io/"
+    "spray" at "http://repo.spray.io/",
+    "spray repo" at "http://repo.spray.io/"
   )
 
   lazy val akkaVersion = "2.1.4"
   val destVersion = "2.10.0"
+  val sprayVersion = "1.2-M8"
 
   lazy val projectDependecies = Seq(
+    "io.spray" %  "spray-client" % sprayVersion,
     "com.typesafe.akka" %% "akka-actor" % akkaVersion,
     "com.typesafe.akka" %% "akka-testkit" % akkaVersion,
     "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
@@ -23,7 +26,8 @@ object ScalaloaderBuild extends Build {
     "org.reactivemongo" %% "reactivemongo" % "0.8" withSources(),
     "com.top10" %% "scala-redis-client" % "1.13.0" withSources(),
     "io.spray" %% "spray-json" % "1.2.5",
-    "ch.qos.logback" % "logback-classic" % "1.0.7"
+    "ch.qos.logback" % "logback-classic" % "1.0.7",
+    "org.scala-stm" %% "scala-stm" % "0.7"
   )
 
   lazy val scalaloader = Project(

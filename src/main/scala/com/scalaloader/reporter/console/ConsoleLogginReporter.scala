@@ -4,6 +4,7 @@ import com.scalaloader.reporter.ResultReporter
 import com.scalaloader.actor.{TestCaseResultEvent, TestPlanResultEvent, StatisticsEvent}
 import akka.event.{Logging, LoggingAdapter}
 import akka.actor.ActorSystem
+import PrintableImplicits._
 
 /**
  * User: stas
@@ -13,12 +14,14 @@ import akka.actor.ActorSystem
 class ConsoleLogginReporter(log: LoggingAdapter) extends ResultReporter {
 
   def processTestCase(result: TestCaseResultEvent) {
-    log info result.toString
+    log info toConsoleText(result)
   }
 
   def processTestPlan(result: TestPlanResultEvent) {
     log info result.toString
   }
+
+  def toConsoleText[A <% Printable](print: A) = print.toConsoleString
 
   def report(stat: StatisticsEvent) = ???
 }
